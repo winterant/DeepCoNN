@@ -61,7 +61,7 @@ if __name__ == '__main__':
     config = Config()
     print(config)
     print(f'{date()}## Load embedding and data...')
-    word_emb, word_dict = load_embedding(config.word2vec_file, config.PAD_WORD)
+    word_emb, word_dict = load_embedding(config.word2vec_file)
 
     train_dataset = DeepCoNNDataset(config.train_file, word_dict, config)
     valid_dataset = DeepCoNNDataset(config.valid_file, word_dict, config, retain_rui=False)

@@ -21,6 +21,7 @@ def load_embedding(word2vec_file):
         word_emb[0] = [0] * len(word_emb[1])
     return word_emb, word_dict
 
+
 def predict_mse(model, dataloader, device):
     mse, sample_count = 0, 0
     with torch.no_grad():
