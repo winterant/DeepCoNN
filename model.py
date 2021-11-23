@@ -34,17 +34,19 @@ class CNN(nn.Module):
 class FactorizationMachine(nn.Module):
 
     def __init__(self, p, k):  # p=cnn_out_dim
-        super(FactorizationMachine, self).__init__()
-        self.v = nn.Parameter(torch.zeros(p, k))
+        super().__init__()
+        self.v = nn.Parameter(torch.rand(p, k) / 10)
         self.linear = nn.Linear(p, 1, bias=True)
+        self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         linear_part = self.linear(x)  # input shape(batch_size, cnn_out_dim), out shape(batch_size, 1)
-        inter_part1 = torch.mm(x, self.v)
+        inter_part1 = torch.mm(x, self.v) ** 2
         inter_part2 = torch.mm(x ** 2, self.v ** 2)
-        pair_interactions = torch.sum(inter_part1 ** 2 - inter_part2, dim=1)
-        output = linear_part.transpose(1, 0) + 0.5 * pair_interactions
-        return output.view(-1, 1)  # out shape(batch_size, 1)
+        pair_interactions = torch.sum(inter_part1 - inter_part2, dim=1, keepdim=True)
+        pair_interactions = self.dropout(pair_interactions)
+        output = linear_part + 0.5 * pair_interactions
+        return output  # out shape(batch_size, 1)
 
 
 class DeepCoNN(nn.Module):
