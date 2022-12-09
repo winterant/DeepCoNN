@@ -30,6 +30,9 @@ class Config:
     cnn_out_dim = 50  # CNN输出维度
 
     def __init__(self):
+        # By the way, we can customize parameters in the command line parameters.
+        # For example:
+        # python main.py --device cuda:0 --train_epochs 50
         attributes = inspect.getmembers(self, lambda a: not inspect.isfunction(a))
         attributes = list(filter(lambda x: not x[0].startswith('__'), attributes))
 
